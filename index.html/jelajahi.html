@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jelajahi - Pintrost</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="mrkt.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="ondix.html">Pintrost</a>
+        <a class="btn btn--ghost" id="backHomeBtn" href="marketplace.html" style="margin-left:10px">Kembali</a>
+        <div class="search">
+          <input type="search" id="search" placeholder="Cari gambar...">
+        </div>
+        <div style="min-width:120px;text-align:right;color:#6b7280;font-size:0.95rem">Gratis untuk penggunaan pribadi & komersial</div>
+        <button id="singleUploadBtn" class="btn" style="margin-left:12px">Unggah Gambar</button>
+      </div>
+    </header>
+
+    <main class="container marketplace">
+      <h1 style="margin:1rem 0">Jelajahi Koleksi Pintrost</h1>
+      <section class="products-grid" id="images" tabindex="-1" aria-label="Galeri Gambar" role="list">
+        <!-- Jika ingin, gambar dari marketplace akan dimuat via localStorage -->
+      </section>
+    </main>
+
+    <footer class="site-footer container">
+      <p>Gunakan fitur unggah untuk menambahkan gambar ke koleksi Pintrost.</p>
+    </footer>
+
+    <script src="marketplace.js" defer></script>
+  </body>
+</html>

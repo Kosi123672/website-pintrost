@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jelajahi Gambar - FreeImages</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="mrkt.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="marketplace.html">FreeImages</a>
+        <div class="search">
+          <input type="search" id="search" placeholder="Cari gambar...">
+        </div>
+        <div style="min-width:120px;text-align:right;color:#6b7280;font-size:0.95rem">Gratis untuk penggunaan pribadi & komersial</div>
+        <button id="singleUploadBtn" class="btn" style="margin-left:12px">Unggah Gambar</button>
+      </div>
+    </header>
+
+    <main class="container marketplace">
+      <h1 style="margin:1.25rem 0">Jelajahi Koleksi Gambar</h1>
+      <section class="products-grid" id="images" tabindex="-1" aria-label="Galeri Gambar" role="list">
+        <!-- Salin contoh gambar dari marketplace untuk tampilan awal -->
+        <article class="product-card" data-id="1" data-name="Kamera Mirrorless" data-tags="kamera foto mirrorless" data-src="https://via.placeholder.com/1200x800?text=Kamera+Mirrorless">
+          <div class="thumb" style="background-image:url('https://via.placeholder.com/300x200?text=Kamera')" role="img" aria-label="Kamera Mirrorless"></div>
+          <h3 class="product-title">Kamera Mirrorless</h3>
+          <p class="price">Free • JPG</p>
+          <div class="card-actions"><button class="btn btn--download" data-action="download">Download</button></div>
+        </article>
+
+        <article class="product-card" data-id="2" data-name="Headphone" data-tags="headphone audio musik" data-src="https://via.placeholder.com/1200x800?text=Headphone">
+          <div class="thumb" style="background-image:url('https://via.placeholder.com/300x200?text=Headphone')" role="img" aria-label="Headphone"></div>
+          <h3 class="product-title">Headphone</h3>
+          <p class="price">Free • JPG</p>
+          <div class="card-actions"><button class="btn btn--download" data-action="download">Download</button></div>
+        </article>
+
+        <article class="product-card" data-id="3" data-name="Smartphone" data-tags="smartphone gadget" data-src="https://via.placeholder.com/1200x800?text=Smartphone">
+          <div class="thumb" style="background-image:url('https://via.placeholder.com/300x200?text=Smartphone')" role="img" aria-label="Smartphone"></div>
+          <h3 class="product-title">Smartphone</h3>
+          <p class="price">Free • JPG</p>
+          <div class="card-actions"><button class="btn btn--download" data-action="download">Download</button></div>
+        </article>
+
+      </section>
+    </main>
+
+    <footer class="site-footer container">
+      <p>Semua gambar di situs ini bebas diunduh dan digunakan. Periksa lisensi masing-masing file jika diperlukan.</p>
+    </footer>
+
+    <script src="marketplace.js" defer></script>
+  </body>
+</html>

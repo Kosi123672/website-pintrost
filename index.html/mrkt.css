@@ -1,0 +1,76 @@
+/* mrkt.css - Marketplace styles (clean) */
+:root{
+  --primary: #ff5722;
+  --primary-dark: #e64a19;
+  --muted: #6b7280;
+  --bg: #fff;
+  --card-shadow: 0 8px 24px rgba(18,38,63,0.06);
+}
+
+/* Layout helpers */
+.container{ width:90%; max-width:1100px; margin:0 auto; }
+
+/* Header */
+.site-header{
+  background:#fff;
+  border-bottom:1px solid rgba(0,0,0,0.04);
+  position:sticky; top:0; z-index:40;
+}
+.site-header .container{ display:flex; align-items:center; gap:16px; padding:12px 20px; }
+.brand{ font-weight:800; color:var(--primary); font-size:1.15rem; }
+.search{ flex:1; }
+.search input[type="search"]{ width:100%; max-width:560px; padding:10px 14px; border-radius:28px; border:1px solid rgba(16,24,40,0.06); box-shadow:0 6px 18px rgba(16,24,40,0.04); outline:none; }
+.search input::placeholder{ color:#9ca3af; }
+.cart-btn{ background:transparent; border:none; font-weight:600; cursor:pointer; }
+.cart-badge{ display:inline-block; background:var(--primary); color:#fff; padding:2px 8px; border-radius:999px; margin-left:8px; font-size:.85rem; }
+
+/* Market hero / cover */
+.market-hero{ background: linear-gradient(135deg, rgba(255,87,34,0.06), rgba(240,240,245,0.03)); padding:60px 0; }
+.market-hero__inner{ display:flex; gap:20px; align-items:center; }
+.market-hero__content{ flex:1; }
+.market-hero__title{ font-size:2.6rem; margin:0 0 12px 0; color:#111827; }
+.market-hero__subtitle{ color:var(--muted); margin:0 0 20px 0; }
+.market-hero__actions{ display:flex; gap:12px; }
+.market-hero__visual{ flex:1; min-height:240px; background:linear-gradient(135deg,#e6f0ff,#fff); border-radius:12px; }
+.market-hero__promo { width:360px; height:220px; border-radius:10px; background:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 28px rgba(8,20,40,0.06); padding:12px; }
+.market-hero__promo .promo-thumb { width:100%; height:100%; background-size:cover; background-position:center; border-radius:8px; }
+
+/* Products grid and cards */
+.products-grid{ display:grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); gap:18px; padding:18px 0 60px 0; }
+.product-card{ background:var(--bg); border-radius:12px; padding:10px; box-shadow:var(--card-shadow); display:flex; flex-direction:column; gap:8px; }
+.product-card .thumb{ width:100%; height:140px; border-radius:8px; background-size:cover; background-position:center; }
+.product-title{ font-size:.98rem; margin:0; color:#111827; }
+.price{ font-weight:800; color:var(--primary); margin:0; }
+.product-card .meta{ display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.btn.add-to-cart{ width:100%; margin-top:6px; }
+
+/* Badges & promos */
+.badge{ display:inline-block; background: rgba(255,87,34,0.12); color:var(--primary-dark); padding:4px 8px; border-radius:999px; font-size:.75rem; }
+
+/* Cart drawer */
+.cart-drawer{ position:fixed; right:0; top:0; width:360px; height:100%; background:#fff; box-shadow:0 10px 40px rgba(0,0,0,0.12); transform:translateX(110%); transition:transform .28s ease; z-index:80; display:flex; flex-direction:column; }
+.cart-header{ padding:14px; border-bottom:1px solid rgba(0,0,0,0.06); display:flex; justify-content:space-between; align-items:center; }
+.cart-items{ list-style:none; margin:0; padding:0; overflow:auto; flex:1; }
+.cart-footer{ padding:12px; border-top:1px solid rgba(0,0,0,0.06); display:flex; justify-content:space-between; align-items:center; }
+.cart-item{ display:flex; gap:8px; padding:12px; border-bottom:1px solid rgba(0,0,0,0.04); align-items:center; }
+.cart-item__main{ flex:1; }
+.cart-item__title{ font-size:.95rem; margin-bottom:6px; }
+.cart-item__price{ color:var(--muted); font-size:.95rem; }
+.cart-item__controls{ display:flex; gap:8px; align-items:center; }
+.qty-btn{ padding:6px 10px; border-radius:6px; border:1px solid rgba(0,0,0,0.06); background:#fff; cursor:pointer; }
+.remove-btn{ background:transparent; border:none; color:#ef4444; cursor:pointer; }
+
+/* Floating action button */
+.fab{ position:fixed; right:18px; bottom:18px; width:56px; height:56px; background:var(--primary); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 12px 30px rgba(230,74,25,0.18); z-index:60; cursor:pointer; }
+
+/* Utilities and responsiveness */
+@media (max-width:880px){
+  .search input[type="search"]{ max-width:100%; width:100%; }
+  .market-hero__visual{ display:none; }
+  .products-grid{ gap:12px; }
+  .market-hero__inner{ flex-direction:column; }
+  .market-hero__promo { width:100%; height:180px; }
+  .cart-drawer{ width:100%; max-width:420px; }
+}
+
+/* End of mrkt.css */

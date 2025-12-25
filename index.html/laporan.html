@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pengaduan Klien - Pintrost</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+      .card{max-width:880px;margin:28px auto;background:#fff;padding:18px;border-radius:10px;box-shadow:0 8px 30px rgba(10,20,40,0.06)}
+      label{display:block;margin:10px 0 6px;font-weight:600}
+      input,textarea,select{width:100%;padding:10px;border:1px solid #e6e6e9;border-radius:6px}
+      .row{display:flex;gap:10px}
+      .muted{color:#666;font-size:0.95rem}
+      .small{font-size:0.9rem}
+      .reports-list{margin-top:12px}
+      .report-item{border:1px solid #eee;padding:12px;border-radius:6px;margin-bottom:10px;background:#fff}
+      .report-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+      .resolved{background:#f6ffef;border-color:#e6f4d9}
+      .tag{display:inline-block;padding:4px 8px;border-radius:999px;background:#f0f4f8;color:#333;font-size:0.85rem}
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="marketplace.html">Pintrost</a>
+        <div style="flex:1"></div>
+        <a class="btn" href="marketplace.html">Kembali</a>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card" id="userForm">
+        <h1>Pengaduan Klien</h1>
+        <p class="muted">Gunakan formulir ini untuk mengajukan pengaduan, laporan bug, atau masalah layanan. Kami akan menindaklanjuti secepat mungkin.</p>
+
+        <form id="complaintForm">
+          <label for="name">Nama</label>
+          <input id="name" name="name" placeholder="Nama Anda (opsional)">
+
+          <label for="contact">Kontak (email/telepon)</label>
+          <input id="contact" name="contact" placeholder="Email atau nomor telepon untuk dihubungi">
+
+          <label for="category">Kategori</label>
+          <select id="category" name="category">
+            <option value="layanan">Layanan</option>
+            <option value="bug">Bug / Kesalahan Teknis</option>
+            <option value="konten">Konten Tidak Sesuai</option>
+            <option value="lainnya">Lainnya</option>
+          </select>
+
+          <label for="severity">Prioritas</label>
+          <select id="severity" name="severity">
+            <option value="low">Rendah</option>
+            <option value="medium">Sedang</option>
+            <option value="high">Tinggi</option>
+          </select>
+
+          <label for="message">Deskripsi Pengaduan</label>
+          <textarea id="message" name="message" rows="6" required placeholder="Jelaskan masalah atau pengaduan secara jelas"></textarea>
+
+          <label><input type="checkbox" id="consent"> Saya setuju data kontak dapat digunakan untuk tanggapan</label>
+
+          <div style="display:flex;gap:10px;margin-top:12px;justify-content:flex-end">
+            <button class="btn" type="submit">Kirim Pengaduan</button>
+            <button class="btn btn--ghost" type="button" id="saveLocal">Simpan Lokal</button>
+          </div>
+        </form>
+        <p class="small muted" style="margin-top:10px">Catatan: default akan membuka aplikasi email untuk pemberitahuan ke developer. Untuk penyimpanan di server, integrasikan endpoint backend.</p>
+      </section>
+
+      <section class="card" id="adminPanel" style="display:none;">
+        <h2>Panel Developer — Pengaduan Tersimpan</h2>
+        <div class="muted small">(Munculkan panel ini dengan menambahkan <code>?admin=1</code> pada URL)</div>
+        <div style="margin-top:12px;display:flex;gap:10px;justify-content:flex-end">
+          <button id="exportBtn" class="btn">Ekspor JSON</button>
+          <button id="clearBtn" class="btn btn--danger">Hapus Semua</button>
+        </div>
+        <div class="reports-list" id="reportsList"></div>
+      </section>
+    </main>
+
+    <script>
+      const DEV_EMAIL = 'developer@example.com'; // ganti alamat developer
+      const form = document.getElementById('complaintForm');
+      const saveLocal = document.getElementById('saveLocal');
+      const STORAGE_KEY = 'pintrost_complaints';
+
+      function loadComplaints(){ try{ const r=localStorage.getItem(STORAGE_KEY); return r? JSON.parse(r): []; }catch(e){ return []; } }
+      function saveComplaints(arr){ localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); }
+
+      function collectForm(){
+        return {
+          id: 'c'+Date.now(),
+          name: document.getElementById('name').value.trim(),
+          contact: document.getElementById('contact').value.trim(),
+          category: document.getElementById('category').value,
+          severity: document.getElementById('severity').value,
+          message: document.getElementById('message').value.trim(),
+          consent: !!document.getElementById('consent').checked,
+          status: 'open',
+          created: Date.now()
+        };
+      }
+
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const data = collectForm();
+        const arr = loadComplaints(); arr.unshift(data); saveComplaints(arr);
+        // buka mailto untuk pemberitahuan
+        const body = encodeURIComponent(`Nama: ${data.name}\nKontak: ${data.contact}\nKategori: ${data.category}\nPrioritas: ${data.severity}\n\n${data.message}`);
+        const mailto = `mailto:${DEV_EMAIL}?subject=${encodeURIComponent('Pengaduan: '+(data.name||data.category))}&body=${body}`;
+        window.location.href = mailto;
+        alert('Pengaduan terkirim (disimpan lokal dan pemberitahuan email dibuka).');
+      });
+
+      saveLocal.addEventListener('click', function(){ const data = collectForm(); const arr = loadComplaints(); arr.unshift(data); saveComplaints(arr); alert('Pengaduan disimpan secara lokal.'); });
+
+      // Admin panel rendering
+      const adminPanel = document.getElementById('adminPanel');
+      const reportsList = document.getElementById('reportsList');
+
+      function renderAdmin(){
+        const arr = loadComplaints();
+        reportsList.innerHTML = '';
+        if (!arr.length) { reportsList.innerHTML = '<div class="muted">Belum ada pengaduan</div>'; return; }
+        arr.forEach(r => {
+          const d = new Date(r.created);
+          const item = document.createElement('div'); item.className = 'report-item' + (r.status==='resolved' ? ' resolved' : '');
+          item.dataset.id = r.id;
+          item.innerHTML = `
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <strong>${escapeHtml(r.subject || (r.message.substring(0,60)||'Pengaduan'))}</strong>
+                <div class="muted small">${d.toLocaleString()} • ${r.category} • <span class="tag">${r.severity}</span></div>
+              </div>
+              <div class="muted small">${r.name || 'Anonim'} ${r.contact? '• '+r.contact : ''}</div>
+            </div>
+            <div style="margin-top:8px">${escapeHtml(r.message).replace(/\n/g,'<br>')}</div>
+            <div class="report-actions">
+              <button class="btn btn--ghost" data-act="toggle">${r.status==='resolved' ? 'Buka' : 'Tandai Selesai'}</button>
+              <button class="btn btn--danger" data-act="delete">Hapus</button>
+            </div>
+          `;
+          reportsList.appendChild(item);
+        });
+      }
+
+      function escapeHtml(s){ return (s||'').toString().replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[c]; }); }
+
+      // Delegated actions for admin list
+      reportsList.addEventListener('click', function(e){
+        const btn = e.target.closest('button'); if(!btn) return;
+        const act = btn.dataset.act; const item = btn.closest('.report-item'); if(!item) return;
+        const id = item.dataset.id; let arr = loadComplaints(); const idx = arr.findIndex(x=>x.id===id); if(idx===-1) return;
+        if(act === 'delete'){
+          if(!confirm('Hapus pengaduan ini?')) return; arr.splice(idx,1); saveComplaints(arr); renderAdmin(); return;
+        }
+        if(act === 'toggle'){
+          arr[idx].status = arr[idx].status === 'resolved' ? 'open' : 'resolved'; saveComplaints(arr); renderAdmin(); return;
+        }
+      });
+
+      document.getElementById('exportBtn')?.addEventListener('click', function(){ const data = loadComplaints(); const a=document.createElement('a'); const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); a.href=URL.createObjectURL(blob); a.download='pintrost_complaints.json'; document.body.appendChild(a); a.click(); a.remove(); });
+      document.getElementById('clearBtn')?.addEventListener('click', function(){ if(confirm('Hapus semua pengaduan?')){ localStorage.removeItem(STORAGE_KEY); renderAdmin(); }});
+
+      if (location.search.indexOf('admin=1') !== -1){ adminPanel.style.display='block'; renderAdmin(); }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Pintrost — Satu File</title>
+  <style>
+    /* Combined styles (styles.css + mrkt.css trimmed) */
+    :root{--primary:#ff5722;--muted:#6b7280;--bg:#fff;--card-shadow:0 8px 24px rgba(18,38,63,0.06)}
+    *{box-sizing:border-box}html,body{height:100%}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;color:#222;background:linear-gradient(180deg,#f0f4ff 0%,#fff 60%)}
+    .container{width:90%;max-width:1100px;margin:0 auto;padding:18px}
+    .site-header{background:#fff;border-bottom:1px solid rgba(0,0,0,0.04);position:sticky;top:0;z-index:40}
+    .site-header .container{display:flex;align-items:center;gap:12px}
+    .brand{font-weight:800;color:var(--primary);font-size:1.15rem}
+    .search{flex:1}
+    .search input{width:100%;padding:8px 12px;border:1px solid #e6e6e9;border-radius:28px}
+    .btn{display:inline-block;padding:8px 14px;border-radius:8px;background:#d31d1d;color:#fff;text-decoration:none;font-weight:600;border:none;cursor:pointer}
+    .btn--ghost{background:transparent;color:#333;border:1px solid #eee}
+    .market-hero{padding:36px 0}
+    .market-hero__title{margin:0 0 6px;font-size:1.8rem}
+    .products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:18px}
+    .product-card{background:var(--bg);border-radius:10px;padding:10px;box-shadow:var(--card-shadow);display:flex;flex-direction:column}
+    .thumb{height:140px;background-size:cover;background-position:center;border-radius:8px}
+    .product-title{margin:10px 0 6px;font-size:1rem}
+    .price{color:var(--muted);font-size:0.9rem;margin:0}
+    .card-actions{display:flex;gap:8px;margin-top:auto}
+    .site-footer{padding:28px 0;color:#666;font-size:0.95rem}
+    .center{display:flex;align-items:center;justify-content:center}
+    mark{background:#ffd54f}
+    /* modal / lightbox */
+    #fi-lightbox{display:none;position:fixed;inset:0;align-items:center;justify-content:center;background:rgba(0,0,0,0.85);z-index:1200;padding:20px}
+    #fi-lightbox img{max-width:100%;max-height:90vh;border-radius:8px}
+    /* responsive */
+    @media(max-width:720px){.products-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}}
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="brand">Pintrost</div>
+      <nav style="display:flex;gap:8px;margin-left:10px">
+        <a class="btn btn--ghost" href="#home">Beranda</a>
+        <a class="btn btn--ghost" href="#gallery">Jelajahi</a>
+        <a class="btn btn--ghost" href="#licensi">Lisensi</a>
+        <a class="btn btn--ghost" href="#contact">Kontak</a>
+        <a class="btn btn--ghost" href="#pengaduan">Pengaduan</a>
+      </nav>
+      <div style="flex:1"></div>
+      <input id="search" type="search" placeholder="Cari gambar..." style="width:260px;padding:8px;border:1px solid #eee;border-radius:8px">
+      <button id="singleUploadBtn" class="btn" style="margin-left:12px">Unggah Gambar</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="container market-hero">
+      <h1 class="market-hero__title">Pintrost — Download Gambar Gratis</h1>
+      <p>Koleksi gambar gratis berkualitas tinggi — unduh dan gunakan tanpa ribet.</p>
+      <div style="margin-top:12px"><a class="btn" href="#gallery">Mulai Jelajah</a></div>
+    </section>
+
+    <section id="gallery" class="container">
+      <h2>Galeri</h2>
+      <section class="products-grid" id="images" tabindex="-1" aria-label="Galeri Gambar" role="list">
+        <!-- images loaded by JS -->
+      </section>
+    </section>
+
+    <section id="licensi" class="container">
+      <h2>Lisensi & Panduan</h2>
+      <p>Ringkasan lisensi singkat; periksa detail tiap gambar bila tersedia.</p>
+    </section>
+
+    <section id="contact" class="container">
+      <h2>Kontak Developer</h2>
+      <form id="contactForm" style="max-width:720px">
+        <input id="c_name" placeholder="Nama Anda" style="width:100%;padding:8px;margin-bottom:8px" />
+        <input id="c_email" type="email" placeholder="Email Anda" style="width:100%;padding:8px;margin-bottom:8px" />
+        <input id="c_subject" placeholder="Subjek" style="width:100%;padding:8px;margin-bottom:8px" />
+        <textarea id="c_message" rows="6" placeholder="Pesan" style="width:100%;padding:8px;margin-bottom:8px"></textarea>
+        <div style="text-align:right"><button id="contactSend" class="btn">Kirim</button></div>
+      </form>
+    </section>
+
+    <section id="pengaduan" class="container">
+      <h2>Pengaduan Klien</h2>
+      <form id="complaintForm" style="max-width:720px">
+        <input id="p_name" placeholder="Nama (opsional)" style="width:100%;padding:8px;margin-bottom:8px" />
+        <input id="p_contact" placeholder="Kontak (email/telepon)" style="width:100%;padding:8px;margin-bottom:8px" />
+        <select id="p_category" style="width:100%;padding:8px;margin-bottom:8px">
+          <option value="layanan">Layanan</option>
+          <option value="bug">Bug / Teknis</option>
+          <option value="konten">Konten Tidak Sesuai</option>
+          <option value="lainnya">Lainnya</option>
+        </select>
+        <select id="p_severity" style="width:100%;padding:8px;margin-bottom:8px">
+          <option value="low">Rendah</option>
+          <option value="medium">Sedang</option>
+          <option value="high">Tinggi</option>
+        </select>
+        <textarea id="p_message" rows="6" required style="width:100%;padding:8px;margin-bottom:8px"></textarea>
+        <label><input type="checkbox" id="p_consent"> Saya setuju dihubungi</label>
+        <div style="text-align:right;margin-top:8px"><button class="btn">Kirim Pengaduan</button></div>
+      </form>
+      <div style="margin-top:16px"><a href="#" id="adminPanelToggle">(Admin) Lihat Pengaduan</a></div>
+      <div id="adminPanel" style="display:none;margin-top:12px"></div>
+    </section>
+
+    <footer class="site-footer container">
+      <p>Pintrost — situs demo untuk mengunggah dan mengunduh gambar.</p>
+    </footer>
+  </main>
+
+  <!-- lightbox -->
+  <div id="fi-lightbox" role="dialog" aria-hidden="true"><img id="fi-lightbox-img" alt="Preview"><div id="fi-lightbox-cap" style="color:#fff;text-align:center;margin-top:12px"></div></div>
+
+  <script>
+  (function(){
+    const searchInput = document.getElementById('search');
+    const productsContainer = document.getElementById('images');
+    const singleUploadBtn = document.getElementById('singleUploadBtn');
+
+    // helpers
+    const debounce = (fn, ms=160)=>{let t; return (...a)=>{clearTimeout(t); t=setTimeout(()=>fn(...a), ms)}};
+    const normalize = s => (s||'').toString().toLowerCase().normalize('NFKD').replace(/\p{Diacritic}/gu,'');
+
+    function createImageCard({id,name,src,tags=''}){
+      const article=document.createElement('article'); article.className='product-card'; article.dataset.id=id; article.dataset.name=name; article.dataset.tags=tags; article.dataset.src=src;
+      const thumb=document.createElement('div'); thumb.className='thumb'; thumb.style.backgroundImage=`url('${src}')`; thumb.setAttribute('role','img'); thumb.setAttribute('aria-label',name);
+      const h3=document.createElement('h3'); h3.className='product-title'; h3.textContent=name;
+      const meta=document.createElement('p'); meta.className='price'; meta.textContent='Free • JPG';
+      const actions=document.createElement('div'); actions.className='card-actions';
+      const dl=document.createElement('button'); dl.className='btn btn--download'; dl.dataset.action='download'; dl.textContent='Download';
+      const del=document.createElement('button'); del.className='btn btn--delete'; del.dataset.action='delete'; del.textContent='Hapus';
+      actions.appendChild(dl); actions.appendChild(del);
+      article.appendChild(thumb); article.appendChild(h3); article.appendChild(meta); article.appendChild(actions);
+      return article;
+    }
+
+    function loadSavedImages(){ try{ for(let i=0;i<localStorage.length;i++){ const key=localStorage.key(i); if(!key||!key.startsWith('freeimg_')) continue; const raw=localStorage.getItem(key); if(!raw) continue; const obj=JSON.parse(raw); if(productsContainer.querySelector(`.product-card[data-id="${obj.id}"]`)) continue; const card=createImageCard(obj); productsContainer.appendChild(card);} }catch(e){}
+    }
+
+    function handleDownload(card){ const src=card.dataset.src||''; if(!src) return alert('Gambar tidak tersedia'); const ext = src.indexOf('data:')===0? 'png': (src.split('.').pop().split(/[#?]/)[0]||'jpg'); const name=(card.dataset.name||'image')+'.'+ext; const a=document.createElement('a'); a.href=src; a.download=name; document.body.appendChild(a); a.click(); a.remove(); }
+    function deleteImage(card){ if(!card) return; const id=card.dataset.id; if(id && localStorage.getItem('freeimg_'+id)) localStorage.removeItem('freeimg_'+id); card.remove(); }
+
+    // search
+    function filterImages(){ const q=normalize(searchInput.value||'').trim(); const cards=Array.from(productsContainer.querySelectorAll('.product-card')); if(!q){ cards.forEach(c=>c.style.display=''); return; } const terms=q.split(/\s+/).filter(Boolean); cards.forEach(card=>{ const name=normalize(card.dataset.name||''); const tags=normalize(card.dataset.tags||''); const hay=name+' '+tags; const match=terms.every(t=>hay.includes(t)); card.style.display=match? '':'none'; }); }
+    if(searchInput) searchInput.addEventListener('input', debounce(filterImages,160));
+
+    // uploader
+    function initSingleUploader(){ if(!singleUploadBtn) return; const input=document.createElement('input'); input.type='file'; input.accept='image/*'; input.style.display='none'; document.body.appendChild(input); singleUploadBtn.addEventListener('click',()=>input.click()); input.addEventListener('change', e=>{ const file=e.target.files&&e.target.files[0]; if(!file) return; const reader=new FileReader(); reader.onload=ev=>{ const dataUrl=ev.target.result; const defaultName=(file.name||'image').replace(/\.[^/.]+$/,''); openNameModal({dataUrl,defaultName,file}); }; reader.readAsDataURL(file); }); }
+
+    function openNameModal({dataUrl,defaultName=''}){ if(document.getElementById('fi-name-modal')) return; const o=document.createElement('div'); o.id='fi-name-modal'; o.style.cssText='position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);z-index:1300;padding:20px;'; const f=document.createElement('form'); f.style.cssText='background:#fff;padding:18px;border-radius:8px;max-width:420px;width:100%;'; const title=document.createElement('h3'); title.textContent='Detail Gambar'; const preview=document.createElement('div'); preview.style.cssText='height:160px;background-size:cover;background-position:center;border-radius:6px;margin-bottom:12px;'; preview.style.backgroundImage=`url('${dataUrl}')`; const nameInput=document.createElement('input'); nameInput.type='text'; nameInput.value=defaultName; nameInput.required=true; nameInput.style.cssText='width:100%;padding:8px;margin-bottom:12px;border:1px solid #ddd;border-radius:4px;'; const tagInput=document.createElement('input'); tagInput.type='text'; tagInput.placeholder='tag1 tag2'; tagInput.style.cssText='width:100%;padding:8px;margin-bottom:12px;border:1px solid #ddd;border-radius:4px;'; const actions=document.createElement('div'); actions.style.cssText='display:flex;gap:8px;justify-content:flex-end;'; const cancel=document.createElement('button'); cancel.type='button'; cancel.className='btn btn--ghost'; cancel.textContent='Batal'; const save=document.createElement('button'); save.type='submit'; save.className='btn'; save.textContent='Simpan & Unggah'; actions.appendChild(cancel); actions.appendChild(save); f.appendChild(title); f.appendChild(preview); f.appendChild(nameInput); f.appendChild(tagInput); f.appendChild(actions); o.appendChild(f); document.body.appendChild(o); cancel.addEventListener('click',()=>o.remove()); f.addEventListener('submit',ev=>{ ev.preventDefault(); const name=nameInput.value.trim()||defaultName||'image'; const tags=tagInput.value.trim(); const id='u'+Date.now(); const card=createImageCard({id,name,src:dataUrl,tags}); productsContainer.insertBefore(card,productsContainer.firstChild); try{ localStorage.setItem('freeimg_'+id,JSON.stringify({id,name,src:dataUrl,tags})); }catch(e){}; o.remove(); }); }
+
+    // lightbox
+    function openLightbox(src,title){ let overlay=document.getElementById('fi-lightbox'); if(!overlay){ overlay=document.getElementById('fi-lightbox'); } const img=document.getElementById('fi-lightbox-img'); const cap=document.getElementById('fi-lightbox-cap'); img.src=src; cap.textContent=title||''; overlay.style.display='flex'; overlay.setAttribute('aria-hidden','false'); }
+    function closeLightbox(){ const o=document.getElementById('fi-lightbox'); o.style.display='none'; o.setAttribute('aria-hidden','true'); }
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeLightbox(); }); document.getElementById('fi-lightbox').addEventListener('click', e=>{ if(e.target.id==='fi-lightbox' || e.target.id==='fi-lightbox-img') closeLightbox(); });
+
+    // delegated actions
+    document.body.addEventListener('click', e=>{
+      const dlBtn=e.target.closest('.btn--download'); if(dlBtn){ const card=dlBtn.closest('.product-card'); if(card) handleDownload(card); return; }
+      const delBtn=e.target.closest('.btn--delete'); if(delBtn){ const card=delBtn.closest('.product-card'); if(card) deleteImage(card); return; }
+      const thumb=e.target.closest('.thumb'); if(thumb){ const card=thumb.closest('.product-card'); const src=card?.dataset.src||''; const title=card?.dataset.name||''; if(src) openLightbox(src,title); }
+    });
+
+    // init
+    loadSavedImages(); initSingleUploader();
+
+    // Contact form (mailto)
+    document.getElementById('contactForm').addEventListener('submit', function(e){ e.preventDefault(); const name=document.getElementById('c_name').value.trim(); const email=document.getElementById('c_email').value.trim(); const subject=document.getElementById('c_subject').value.trim()||'Pesan dari pengguna'; const msg=document.getElementById('c_message').value.trim(); const dev='developer@example.com'; const body=encodeURIComponent(`Nama: ${name}\nEmail: ${email}\n\n${msg}`); window.location.href=`mailto:${dev}?subject=${encodeURIComponent(subject)}&body=${body}`; alert('Membuka email untuk mengirim pesan ke developer.'); });
+
+    // Pengaduan
+    const STORAGE_KEY='pintrost_complaints';
+    function loadComplaints(){ try{ const r=localStorage.getItem(STORAGE_KEY); return r?JSON.parse(r):[] }catch(e){return[]} }
+    function saveComplaints(a){ localStorage.setItem(STORAGE_KEY,JSON.stringify(a)); }
+    function collectForm(){ return { id:'c'+Date.now(), name:document.getElementById('p_name').value.trim(), contact:document.getElementById('p_contact').value.trim(), category:document.getElementById('p_category').value, severity:document.getElementById('p_severity').value, message:document.getElementById('p_message').value.trim(), consent:!!document.getElementById('p_consent').checked, status:'open', created:Date.now() } }
+    document.getElementById('complaintForm').addEventListener('submit', function(e){ e.preventDefault(); const d=collectForm(); const arr=loadComplaints(); arr.unshift(d); saveComplaints(arr); const dev='developer@example.com'; const body=encodeURIComponent(`Nama: ${d.name}\nKontak: ${d.contact}\nKategori: ${d.category}\nPrioritas: ${d.severity}\n\n${d.message}`); window.location.href=`mailto:${dev}?subject=${encodeURIComponent('Pengaduan: '+(d.name||d.category))}&body=${body}`; alert('Pengaduan terkirim dan disimpan lokal.'); });
+    document.getElementById('adminPanelToggle').addEventListener('click', function(e){ e.preventDefault(); const panel=document.getElementById('adminPanel'); panel.style.display=panel.style.display==='block'?'none':'block'; renderAdmin(); });
+    function renderAdmin(){ const panel=document.getElementById('adminPanel'); const arr=loadComplaints(); if(!arr.length){ panel.innerHTML='<div class="muted">Belum ada pengaduan</div>'; return; } panel.innerHTML=''; arr.forEach(r=>{ const d=new Date(r.created); const el=document.createElement('div'); el.className='report-item'; el.innerHTML=`<strong>${escapeHtml(r.category+' - '+(r.name||'Anonim'))}</strong> <div class="muted small">${d.toLocaleString()} • ${r.severity}</div><div style="margin-top:8px">${escapeHtml(r.message).replace(/\n/g,'<br>')}</div><div style="margin-top:8px" class="report-actions"><button class="btn" data-id="${r.id}" data-act="toggle">${r.status==='resolved'?'Buka':'Tandai Selesai'}</button><button class="btn btn--danger" data-id="${r.id}" data-act="delete">Hapus</button></div>`; panel.appendChild(el); }); }
+    function escapeHtml(s){ return (s||'').toString().replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[c]}) }
+    document.getElementById('adminPanel').addEventListener('click', function(e){ const btn=e.target.closest('button'); if(!btn) return; const act=btn.dataset.act; const id=btn.dataset.id; let arr=loadComplaints(); const idx=arr.findIndex(x=>x.id===id); if(idx===-1) return; if(act==='delete'){ if(!confirm('Hapus pengaduan ini?')) return; arr.splice(idx,1); saveComplaints(arr); renderAdmin(); return; } if(act==='toggle'){ arr[idx].status = arr[idx].status==='resolved'?'open':'resolved'; saveComplaints(arr); renderAdmin(); return; } });
+
+  })();
+  </script>
+</body>
+</html>

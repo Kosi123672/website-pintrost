@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kontak Developer - Pintrost</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="mrkt.css">
+    <style>
+      .contact-card{max-width:760px;margin:36px auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 8px 30px rgba(10,20,40,0.06)}
+      .contact-field{display:block;width:100%;padding:10px;border:1px solid #e6e6e9;border-radius:6px;margin-bottom:12px}
+      .contact-actions{text-align:right}
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="marketplace.html">Pintrost</a>
+        <div style="flex:1"></div>
+        <a class="btn" href="marketplace.html">Kembali</a>
+      </div>
+    </header>
+
+    <main class="container">
+      <div class="contact-card">
+        <h1>Kontak Developer</h1>
+        <p>Jika Anda ingin melaporkan bug, saran fitur, atau pertanyaan lain, silakan isi formulir berikut. Pesan akan dikirim ke email developer.</p>
+
+        <form id="contactForm">
+          <input class="contact-field" id="name" name="name" placeholder="Nama Anda" required>
+          <input class="contact-field" id="email" name="email" type="email" placeholder="Email Anda" required>
+          <input class="contact-field" id="subject" name="subject" placeholder="Subjek" required>
+          <textarea class="contact-field" id="message" name="message" rows="6" placeholder="Tulis pesan Anda di sini" required></textarea>
+          <div class="contact-actions">
+            <button type="submit" class="btn">Kirim</button>
+            <a class="btn btn--ghost" href="mailto:developer@example.com">Email langsung</a>
+          </div>
+        </form>
+
+        <p style="margin-top:12px;color:#666;font-size:0.95rem">Catatan: Formulir ini membuka aplikasi email default menggunakan <code>mailto:</code>. Untuk penyimpanan/penanganan pesan di server, pasang endpoint backend.</p>
+      </div>
+    </main>
+
+    <script>
+      document.getElementById('contactForm').addEventListener('submit', function(e){
+        e.preventDefault();
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const subject = document.getElementById('subject').value.trim();
+        const message = document.getElementById('message').value.trim();
+        const devEmail = 'developer@example.com'; // ganti dengan email developer
+        const body = encodeURIComponent(`Nama: ${name}\nEmail: ${email}\n\n${message}`);
+        const mailto = `mailto:${devEmail}?subject=${encodeURIComponent(subject)}&body=${body}`;
+        window.location.href = mailto;
+      });
+    </script>
+  </body>
+</html>
